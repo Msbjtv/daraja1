@@ -1,24 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import {auth} from './Firebaseconfig'
-import axios from 'axios';
 import { useLocation, useNavigate  } from 'react-router-dom';
 
 import {stkPush, getAuthToken} from './Services/Mpesa'
 const Activate = () => {
     const location = useLocation()
     const {phoneNumber}=location.state || {};
-    const [message, setMessage] = useState('');
-    const navigate = useNavigate ();
+    // const [message, setMessage] = useState('');
+    // const navigate = useNavigate ();
 
     const handleActivate = async () => {
-        try {
-            const token = await getAuthToken();
-            await stkPush(phoneNumber, token);
-            setMessage('STK Push Sent. Check your phone.');
-        } catch (error) {
-            setMessage('Failed to send STK Push.');
-        }
-    };
+      try {
+          const response = await fetch('/api/stk-push', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  phoneNumber: phoneNumber
+              }),
+          });
+  
+          const data = await response.json();
+          if (response.ok) {
+              console.log('Payment initiated:', data);
+              alert('STK Push sent to your phone');
+          } else {
+              console.error('Payment initiation failed:', data);
+              alert('Error initiating payment');
+          }
+      } catch (error) {
+          console.error('Error:', error);
+          alert('Error processing payment');
+      }
+  };
+  
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
@@ -33,7 +48,7 @@ const Activate = () => {
                 >
                     Activate account
                 </button>
-                {message && <p className="mt-4 text-center">{message}</p>}
+                {/* {message && <p className="mt-4 text-center">{message}</p>} */}
             </div>
         </div>
     );

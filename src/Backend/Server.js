@@ -36,11 +36,11 @@ app.post('/api/stk-push', async (req, res) => {
                 Password: password,
                 Timestamp: timestamp,
                 TransactionType: 'CustomerPayBillOnline',
-                Amount: 200, // Amount to be paid
+                Amount: 200, 
                 PartyA: phoneNumber,
                 PartyB: process.env.MPESA_SHORTCODE,
                 PhoneNumber: phoneNumber,
-                CallBackURL: `${process.env.CALLBACK_URL}/api/callback`, // Callback URL
+                CallBackURL: `${process.env.CALLBACK_URL}/api/callback`, 
                 AccountReference: 'SavaayActivation',
                 TransactionDesc: 'Account Activation Payment',
             },
